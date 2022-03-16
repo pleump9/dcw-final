@@ -2,9 +2,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const axios = require('axios')
 const cors = require('cors')
+const mongoose = require('mongoose')
 const app = express()
 const port = 8080
 
+mongoose.connect('mongodb://localhost/subscribers')
 
 app.use(cors())
 
