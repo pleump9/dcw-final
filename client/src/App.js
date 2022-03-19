@@ -2,7 +2,8 @@ import axios from 'axios'
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 import React from 'react';
-// P9's app id 979747605978163
+// P9's facebook app id 979747605978163
+// Uekiz's facebook app id 492042448972691
 
 axios.interceptors.request.use(function (config) {
   const token = sessionStorage.getItem('access_token')
@@ -53,6 +54,11 @@ function App() {
         fields="name,email,picture"
         callback={responseFacebook} />,
       <button onClick={callInfoAPI}>Click me</button>
+      <form>
+        <input type="text" />
+
+        <input type="file" />
+      </form>
     </div>
   );
 }
