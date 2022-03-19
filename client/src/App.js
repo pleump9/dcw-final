@@ -37,24 +37,23 @@ const callInfoAPI = async () => {
 
 function App() {
   return (
-    <><div>
+    <div className="App">
       <GoogleLogin
         clientId={'967709052865-n4vi83vdl1sdf79gh9coickriebopfmp.apps.googleusercontent.com'}
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
       >
         <span> Login with Google</span>
+        {/* error.txt */}
       </GoogleLogin>
-      {/* ลองใช้ api แต่ invalid_request เกี่ยวกับ redirect_uri
-      https://accounts.google.com/signin/oauth/error?authError=Cg9pbnZhbGlkX3JlcXVlc3QS3gEKWW91IGNhbid0IHNpZ24gaW4gdG8gdGhpcyBhcHAgYmVjYXVzZSBpdCBkb2Vzbid0IGNvbXBseSB3aXRoIEdvb2dsZSdzIE9BdXRoIDIuMCBwb2xpY3kgZm9yIGtlZXBpbmcgYXBwcyBzZWN1cmUuCgpZb3UgY2FuIGxldCB0aGUgYXBwIGRldmVsb3BlciBrbm93IHRoYXQgdGhpcyBhcHAgZG9lc24ndCBjb21wbHkgd2l0aCBvbmUgb3IgbW9yZSBHb29nbGUgdmFsaWRhdGlvbiBydWxlcy4KICAaWWh0dHBzOi8vZGV2ZWxvcGVycy5nb29nbGUuY29tL2lkZW50aXR5L3Byb3RvY29scy9vYXV0aDIvcG9saWNpZXMjc2VjdXJlLXJlc3BvbnNlLWhhbmRsaW5nIJADKh4KDHJlZGlyZWN0X3VyaRIObG9jYWxob3N0OjMwMDA%3D&client_id=967709052865-n4vi83vdl1sdf79gh9coickriebopfmp.apps.googleusercontent.com */}
-    </div><div className="App">
-        <FacebookLogin
-          appId="492042448972691"
-          autoLoad={true}
-          fields="name,email,picture"
-          callback={responseFacebook} />,
-        <button onClick={callInfoAPI}>Click me</button>
-      </div></>
+      <br/>
+      <FacebookLogin
+        appId="492042448972691"
+        autoLoad={true}
+        fields="name,email,picture"
+        callback={responseFacebook} />,
+      <button onClick={callInfoAPI}>Click me</button>
+    </div>
   );
 }
 
