@@ -36,6 +36,11 @@ const callInfoAPI = async () => {
   console.log(result.data)
 }
 
+const submitForm = () => {
+  console.log('waiting...')
+  // submit all data to backend
+}
+
 function App() {
   const [name, setName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -49,7 +54,7 @@ function App() {
         <span> Login with Google</span>
         {/* error.txt */}
       </GoogleLogin>
-      <br/>
+      <br />
       <FacebookLogin
         appId="492042448972691"
         autoLoad={true}
@@ -66,8 +71,12 @@ function App() {
         <input
           type="file"
           // value={selectedFile}
-          onChange={(e) => setSelectedFile(e.target.files[0])}
+          onChange={(e) => {
+            console.log(e.target.files[0]);
+            setSelectedFile(e.target.files[0])
+          }}
         />
+        <button onClick={submitForm}>Submit</button>
       </form>
     </div>
   );
