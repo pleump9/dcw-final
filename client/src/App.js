@@ -65,7 +65,7 @@ function App() {
 
         <input
           type="file"
-          value={selectedFile}
+          // value={selectedFile}
           onChange={(e) => setSelectedFile(e.target.files[0])}
         />
       </form>
