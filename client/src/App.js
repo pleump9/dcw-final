@@ -44,6 +44,7 @@ const submitForm = () => {
 function App() {
   const [name, setName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null)
   return (
     <div className="App">
       <GoogleLogin
@@ -72,12 +73,24 @@ function App() {
           type="file"
           // value={selectedFile}
           onChange={(e) => {
-            console.log(e.target.files[0]);
+            console.log(e.target.files[0])
             setSelectedFile(e.target.files[0])
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setImagePreviewUrl(reader.result)
+            }
+            reader.readAsDataURL(e.target.files[0])
           }}
         />
         <button onClick={submitForm}>Submit</button>
       </form>
+      <React.Fragment>
+        <img
+          src={imagePreviewUrl ? imagePreviewUrl : "https://www.gamudacove.com.my/media/img/default-img.jpg"
+          }
+          style={{ width: "150px", height: "150px" }}
+        />
+      </React.Fragment>
     </div>
   );
 }
