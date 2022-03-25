@@ -1,14 +1,29 @@
+require("dotenv").config();
 const express = require('express')
 const bodyParser = require('body-parser')
 const axios = require('axios')
 const cors = require('cors')
-const mongoose = require('mongoose')
 const app = express()
 const port = 8080
 
-mongoose.connect('mongodb://localhost/subscribers')
+const upload = require("./middleware/upload");
+const Grid = require("gridfs-stream");
+const mongoose = require("mongoose");
+const connection = require("./db");
 
 app.use(cors())
+
+//-------------------- DB --------------------
+let gfs;
+connection();
+
+const conn = mongoose.connection;
+conn.once("open", function () {
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection("photos");
+});
+
+//-------------------- Authen --------------------
 
 const TOKEN_SECRET = '870d1fa5011e4d963addea0978c52b321fdc694f9d3632fa9c343f080a5c1d76ee097ce353f9bfe5add221d8285e49a0a1716746f1911c5b3fd1bdf777fde11c'
 var jwt = require('jsonwebtoken');
@@ -16,22 +31,24 @@ var jwt = require('jsonwebtoken');
 const authtenticated = (req, res, next) => {
   const auth_header = req.headers['authorization']
   const token = auth_header && auth_header.split(' ')[1]
-  if(!token){
-      return res.sendStatus(401)
+  if (!token) {
+    return res.sendStatus(401)
   }
   jwt.verify(token, TOKEN_SECRET, (err, info) => {
-      if(err){
-          return res.sendStatus(403)
-      }
-      req.username = info.username
-      next()
+    if (err) {
+      return res.sendStatus(403)
+    }
+    req.username = info.username
+    next()
   })
 }
 
+//-------------------- API -------------------------
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+//-------------------- API  Login -------------------------
 app.post('/api/login', bodyParser.json(), async (req, res) => {
   let token = req.body.token
   let result = await axios.get('https://graph.facebook.com/me', {
@@ -51,10 +68,38 @@ app.post('/api/login', bodyParser.json(), async (req, res) => {
   res.send({ access_token, username: data.username })
 })
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`)
+app.get('/api/info', authtenticated, (req, res) => {
+  res.send({ ok: 1, username: req.username })
 })
 
-app.get('/api/info', authtenticated, (req, res)  => {
-  res.send({ok: 1, username: req.username})
+//-------------------- File -------------------------
+app.post("/file/upload", upload.single("file"), async (req, res) => {
+  if (req.file === undefined) return res.send("you must select a file.");
+  const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
+  return res.send(imgUrl);
+});
+
+app.get("/file/:filename", async (req, res) => {
+  try {
+      const file = await gfs.files.findOne({ filename: req.params.filename });
+      const readStream = gfs.createReadStream(file.filename);
+      readStream.pipe(res);
+  } catch (error) {
+      res.send("not found");
+  }
+});
+
+app.delete("/file/:filename", async (req, res) => {
+  try {
+      await gfs.files.deleteOne({ filename: req.params.filename });
+      res.send("success");
+  } catch (error) {
+      console.log(error);
+      res.send("An error occured.");
+  }
+});
+
+//-------------------- PORT -------------------------
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`)
 })
