@@ -33,12 +33,17 @@ const responseFacebook = async (response) => {
 
 const callInfoAPI = async () => {
   let result = await axios.get('http://localhost:8080/api/info')
-  console.log(result.data)
+  console.log(result.data);
 }
 
-const submitForm = () => {
-  console.log('waiting...')
-  // submit all data to backend
+const submitForm = async myData => {
+  console.log('waiting... ');
+  // console.log(response);
+  let result = await axios.post('http://localhost:8080/form/submit', {
+    name : myData.name,
+    file : myData.image
+  })
+  console.log(result.data);
 }
 
 function App() {
@@ -73,8 +78,10 @@ function App() {
           type="file"
           // value={selectedFile}
           onChange={(e) => {
-            console.log(e.target.files[0])
-            setSelectedFile(e.target.files[0])
+            console.log(e.target.files[0]);
+            setSelectedFile(e.target.files[0]);
+            // console.log(selectedFile);
+            // console.log(imagePreviewUrl);
             const reader = new FileReader();
             reader.onloadend = () => {
               setImagePreviewUrl(reader.result)
@@ -82,7 +89,16 @@ function App() {
             reader.readAsDataURL(e.target.files[0])
           }}
         />
-        <button onClick={submitForm}>Submit</button>
+        <button type='button' onClick={() => 
+          {
+            var myData = {
+              name: name,
+              image: selectedFile
+            };
+            console.log(myData);
+            submitForm(myData);
+          }
+        }>Submit</button>
       </form>
       <React.Fragment>
         <img

@@ -48,6 +48,12 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+app.post('/form/submit', (req, res) => {
+  if (req.file === undefined) return res.send("you must select a file.");
+  const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
+  return res.send(imgUrl + '\n name : ' + req.body.name);
+})
+
 //-------------------- API  Login -------------------------
 app.post('/api/login', bodyParser.json(), async (req, res) => {
   let token = req.body.token
