@@ -36,13 +36,19 @@ const callInfoAPI = async () => {
   console.log(result.data);
 }
 
-const submitForm = async myData => {
+const submitForm = async values => {
   console.log('waiting... ');
-  // console.log(response);
-  let result = await axios.post('http://localhost:8080/form/submit', {
-    name : myData.name,
-    file : myData.image
-  })
+  const formData = new FormData();
+  formData.append('name', values.name);
+  formData.append('file', values.file);
+  // console.log(values.name);
+  // console.log(values.file);
+  // console.log(formData);
+  let result = await axios({
+    method: 'post',
+    url: 'http://localhost:8080/form/submit',
+    data: formData
+    })
   console.log(result.data);
 }
 
@@ -91,12 +97,12 @@ function App() {
         />
         <button type='button' onClick={() => 
           {
-            var myData = {
+            var values = {
               name: name,
-              image: selectedFile
+              file: selectedFile
             };
-            console.log(myData);
-            submitForm(myData);
+            // console.log(formData);
+            submitForm(values);
           }
         }>Submit</button>
       </form>

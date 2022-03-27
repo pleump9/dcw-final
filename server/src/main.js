@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.post('/form/submit', (req, res) => {
+app.post("/form/submit", upload.single("file"), async (req, res) => {
   if (req.file === undefined) return res.send("you must select a file.");
   const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
   return res.send(imgUrl + '\n name : ' + req.body.name);
@@ -82,7 +82,7 @@ app.get('/api/info', authtenticated, (req, res) => {
 app.post("/file/upload", upload.single("file"), async (req, res) => {
   if (req.file === undefined) return res.send("you must select a file.");
   const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
-  return res.send(imgUrl);
+  return res.send(imgUrl + req.body.name);
 });
 
 app.get("/file/:filename", async (req, res) => {
