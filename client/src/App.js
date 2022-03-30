@@ -40,6 +40,7 @@ const submitForm = async values => {
   console.log('waiting... ');
   const formData = new FormData();
   formData.append('name', values.name);
+  formData.append('email', 'p9@gmail.com')
   formData.append('file', values.file);
   // console.log(values.name);
   // console.log(values.file);

@@ -1,5 +1,5 @@
 const multer = require("multer");
-const {GridFsStorage} = require('multer-gridfs-storage');
+const { GridFsStorage } = require('multer-gridfs-storage');
 
 const storage = new GridFsStorage({
     url: process.env.DB,
@@ -12,10 +12,21 @@ const storage = new GridFsStorage({
             return filename;
         }
 
-        return {
-            bucketName: "photos",
-            filename: `${file.originalname}`,
-        };
+        // return {
+        //     bucketName: "photos",
+        //     filename: `${file.originalname}`,
+        // };
+        return new Promise((resolve, reject) => {
+
+            const filename = `${file.originalname}`
+            const Description = req.body.Description
+            const fileInfo = {
+                filename: filename,
+                bucketName: 'contents',
+                metadata: req.body,
+            }
+            resolve(fileInfo, Description);
+        });
     },
 });
 

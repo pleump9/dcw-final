@@ -20,7 +20,7 @@ connection();
 const conn = mongoose.connection;
 conn.once("open", function () {
   gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection("photos");
+  gfs.collection("contents");
 });
 
 //-------------------- Authen --------------------
