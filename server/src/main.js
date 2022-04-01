@@ -51,7 +51,20 @@ app.get('/', (req, res) => {
 app.post("/form/submit", upload.single("file"), async (req, res) => {
   if (req.file === undefined) return res.send("you must select a file.");
   const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
-  return res.send(imgUrl + '\n name : ' + req.body.name);
+  return res.send(imgUrl + '\n text : ' + req.body.text + '\n email : ' + req.body.email);
+})
+
+app.get("/form/history", async (req, res) => {
+  try {
+    let result = await axios.get('http://localhost:8080', {
+      params: {
+        
+      }
+    })
+  } catch (err) {
+    throw (err)
+  }
+  return
 })
 
 //-------------------- API  Login -------------------------
@@ -87,21 +100,21 @@ app.post("/file/upload", upload.single("file"), async (req, res) => {
 
 app.get("/file/:filename", async (req, res) => {
   try {
-      const file = await gfs.files.findOne({ filename: req.params.filename });
-      const readStream = gfs.createReadStream(file.filename);
-      readStream.pipe(res);
+    const file = await gfs.files.findOne({ filename: req.params.filename });
+    const readStream = gfs.createReadStream(file.filename);
+    readStream.pipe(res);
   } catch (error) {
-      res.send("not found");
+    res.send("not found");
   }
 });
 
 app.delete("/file/:filename", async (req, res) => {
   try {
-      await gfs.files.deleteOne({ filename: req.params.filename });
-      res.send("success");
+    await gfs.files.deleteOne({ filename: req.params.filename });
+    res.send("success");
   } catch (error) {
-      console.log(error);
-      res.send("An error occured.");
+    console.log(error);
+    res.send("An error occured.");
   }
 });
 
