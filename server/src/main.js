@@ -98,11 +98,12 @@ app.post("/file/upload", upload.single("file"), async (req, res) => {
   return res.send(imgUrl + req.body.name);
 });
 
-app.get("/file/:filename", async (req, res) => {
+app.get("/file/get", async (req, res) => {
   try {
-    const file = await gfs.files.findOne({ filename: req.params.filename });
+    const file = await gfs.files.findOne({ "metadata.email": "kingghostdragon@hotmail.co.th" });
     const readStream = gfs.createReadStream(file.filename);
     readStream.pipe(res);
+    // res.send(file.metadata.text)
   } catch (error) {
     res.send("not found");
   }
