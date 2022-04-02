@@ -1,15 +1,17 @@
 require("dotenv").config();
-const express = require('express')
-const bodyParser = require('body-parser')
-const axios = require('axios')
-const cors = require('cors')
-const app = express()
+const express = require('express');
+const bodyParser = require('body-parser');
+const axios = require('axios');
+const cors = require('cors');
+const app = express();
 const port = 8080
 
 const upload = require("./middleware/upload");
 const Grid = require("gridfs-stream");
 const mongoose = require("mongoose");
 const connection = require("./db");
+
+const logger = require('./logger');
 
 app.use(cors())
 
@@ -32,10 +34,12 @@ const authtenticated = (req, res, next) => {
   const auth_header = req.headers['authorization']
   const token = auth_header && auth_header.split(' ')[1]
   if (!token) {
+    logger.error('No Token!')
     return res.sendStatus(401)
   }
   jwt.verify(token, TOKEN_SECRET, (err, info) => {
     if (err) {
+      logger.error('Token Err')
       return res.sendStatus(403)
     }
     req.username = info.username
@@ -51,6 +55,7 @@ app.get('/', (req, res) => {
 app.post("/form/submit", upload.single("file"), async (req, res) => {
   if (req.file === undefined) return res.send("you must select a file.");
   const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
+  logger.info('Submit Form');
   return res.send(imgUrl + '\n text : ' + req.body.text + '\n email : ' + req.body.email);
 })
 
@@ -58,7 +63,7 @@ app.get("/form/history", async (req, res) => {
   try {
     let result = await axios.get('http://localhost:8080', {
       params: {
-        
+
       }
     })
   } catch (err) {
@@ -76,7 +81,10 @@ app.post('/api/login', bodyParser.json(), async (req, res) => {
       access_token: token
     }
   })
+  logger.warn('Login');
+
   if (!result.data.id) {
+    logger.error('Can not Login')
     res.sendStatus(403)
     return
   }
@@ -88,7 +96,8 @@ app.post('/api/login', bodyParser.json(), async (req, res) => {
 })
 
 app.get('/api/info', authtenticated, (req, res) => {
-  res.send({ ok: 1, username: req.username })
+  logger.info('refresh_token');
+  res.send({ ok: 1, username: req.username });
 })
 
 //-------------------- File -------------------------
