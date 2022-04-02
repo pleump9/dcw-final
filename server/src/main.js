@@ -61,7 +61,6 @@ app.post("/form/submit", upload.single("file"), async (req, res) => {
 
 app.get("/form/history", async (req, res) => {
   try {
-    // res.send(req.query.email);
     const fileList = await gfs.files.find({ "metadata.email": req.query.email }).toArray();
     res.send(fileList)
   } catch (error) {

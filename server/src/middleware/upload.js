@@ -12,10 +12,6 @@ const storage = new GridFsStorage({
             return filename;
         }
 
-        // return {
-        //     bucketName: "photos",
-        //     filename: `${file.originalname}`,
-        // };
         return new Promise((resolve, reject) => {
 
             const filename = `${file.originalname}`

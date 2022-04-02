@@ -7,6 +7,13 @@ import React, { useState } from 'react';
 
 function App() {
 
+  const [text, setText] = useState("");
+  const [email, setEmail] = useState("");
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+
   axios.interceptors.request.use(function (config) {
     const token = sessionStorage.getItem('access_token')
     if (token) {
@@ -40,9 +47,6 @@ function App() {
     formData.append('text', values.text);
     formData.append('email', values.email)
     formData.append('file', values.file);
-    // console.log(values.text);
-    // console.log(values.file);
-    // console.log(formData);
     let result = await axios({
       method: 'post',
       url: 'http://localhost:8080/form/submit',
@@ -64,26 +68,21 @@ function App() {
     setHistory(result.data);
   }
 
-  const [text, setText] = useState("");
-  const [email, setEmail] = useState("");
-  const [history, setHistory] = useState([]);
-  const [showHistory, setShowHistory] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
-
   return (
     <div className="App">
-
       <br />
       <div>
-        <GoogleLogin
+        {
+          email === "" ?
+          <GoogleLogin
           clientId={'967709052865-n4vi83vdl1sdf79gh9coickriebopfmp.apps.googleusercontent.com'}
           onSuccess={responseGoogle}
           onFailure={responseGoogle}
         >
           <span> Login with Google</span>
-          {/* error.txt */}
         </GoogleLogin>
+        : <p> logged in as {email}</p>
+        }
         <span style={{ marginLeft: '.5rem' }}></span>
         <div>
           {
@@ -97,13 +96,9 @@ function App() {
               : <p> logged in as {email}</p>
           }
         </div>
-
       </div>
-
       <br />
-
       <div>
-
       </div>
 
       <form>
@@ -115,12 +110,9 @@ function App() {
         <span style={{ marginLeft: '.5rem' }}></span>
         <input
           type="file"
-          // value={selectedFile}
           onChange={(e) => {
             console.log(e.target.files[0]);
             setSelectedFile(e.target.files[0]);
-            // console.log(selectedFile);
-            // console.log(imagePreviewUrl);
             const reader = new FileReader();
             reader.onloadend = () => {
               setImagePreviewUrl(reader.result)
@@ -135,7 +127,6 @@ function App() {
               email: email,
               file: selectedFile
             };
-            // console.log(formData);
             submitForm(values);
           }
         }
@@ -143,7 +134,6 @@ function App() {
       </form>
 
       <br />
-
       <div>
         <React.Fragment>
           <img
@@ -154,25 +144,20 @@ function App() {
           />
         </React.Fragment>
       </div>
-
       <br />
-
       <div>
         <button type='button' onClick={() => {
           if (email !== "") {
             var values = {
               email: email,
             };
-            // console.log(showHistory);
             getHistory(values);
             setShowHistory(!showHistory);
           }
         }
         }>History</button>
       </div>
-
       <div>
-
         {
           showHistory ?
             <ul>
@@ -188,10 +173,9 @@ function App() {
                 </p>
               })}
             </ul>
-            : <p>x</p>
+            : <p></p>
         }
       </div>
-
     </div>
   );
 }
