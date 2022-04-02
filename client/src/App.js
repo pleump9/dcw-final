@@ -69,33 +69,36 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <br />
+    <div className="App" style={{ marginLeft: '50px' }}>
+      <div>
+        {
+          email === "" ? <p></p> :
+            <p> logged in as {email}</p>
+        }
+      </div>
       <div>
         {
           email === "" ?
-          <GoogleLogin
-          clientId={'967709052865-n4vi83vdl1sdf79gh9coickriebopfmp.apps.googleusercontent.com'}
-          onSuccess={responseGoogle}
-          onFailure={responseGoogle}
-        >
-          <span> Login with Google</span>
-        </GoogleLogin>
-        : <p> logged in as {email}</p>
+            <span><GoogleLogin
+              clientId={'967709052865-n4vi83vdl1sdf79gh9coickriebopfmp.apps.googleusercontent.com'}
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+            >
+              <span> Login with Google</span>
+            </GoogleLogin></span>
+            : <p></p>
         }
-        <span style={{ marginLeft: '.5rem' }}></span>
-        <div>
-          {
-            email === "" ?
-              <FacebookLogin
-                appId="492042448972691"
-                autoLoad={true}
-                fields="name,email,picture"
-                callback={responseFacebook}
-              />
-              : <p> logged in as {email}</p>
-          }
-        </div>
+        <span style={{ marginLeft: '20px' }}></span>
+        {
+          email === "" ?
+            <FacebookLogin
+              appId="492042448972691"
+              autoLoad={true}
+              fields="name,email,picture"
+              callback={responseFacebook}
+            />
+            : <p></p>
+        }
       </div>
       <br />
       <div>
@@ -135,6 +138,7 @@ function App() {
 
       <br />
       <div>
+        <p>selected file preview : </p>
         <React.Fragment>
           <img
             src={imagePreviewUrl ? imagePreviewUrl : "https://media.discordapp.net/attachments/754687185235607587/954365809793314826/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.png"
