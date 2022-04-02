@@ -173,15 +173,19 @@ function App() {
           showHistory ?
             <ul>
               {history.map((item, index) => {
-                return <p key={index}>
-                  <img
-                    src={"http://localhost:8080/file/" + item.filename}
-                    alt="db img"
-                    style={{ width: "150px", height: "150px" }}
-                  />
-                  <span style={{ marginLeft: '50px' }}></span>
-                  {item.metadata.text}
-                </p>
+                return (
+                  <div key={index} style={{marginBottom: "3em"}}>
+                    Text: {item.metadata.text}
+                    <br/>
+                    createDate: {item.uploadDate}
+                    <br/>
+                    <img
+                      src={"http://localhost:8080/file/" + item.filename}
+                      alt="db img"
+                      style={{ width: "150px", height: "150px", marginTop: "1em" }}
+                    />
+                    <span style={{ marginLeft: '50px' }}></span>
+                  </div>)
               })}
             </ul>
             : <p></p>

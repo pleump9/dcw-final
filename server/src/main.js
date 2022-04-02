@@ -62,6 +62,9 @@ app.post("/form/submit", upload.single("file"), async (req, res) => {
 app.get("/form/history", async (req, res) => {
   try {
     const fileList = await gfs.files.find({ "metadata.email": req.query.email }).toArray();
+    fileList.sort(function(a,b){
+      return new Date(b.uploadDate) - new Date(a.uploadDate);
+    });
     res.send(fileList)
   } catch (error) {
     res.send("not found");
