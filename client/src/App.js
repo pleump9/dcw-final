@@ -61,11 +61,13 @@ function App() {
       }
     });
     console.log(result.data);
+    setHistory(result.data);
   }
 
   const [text, setText] = useState("");
   const [email, setEmail] = useState("");
-  const [history, setHistory] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
@@ -161,12 +163,35 @@ function App() {
             var values = {
               email: email,
             };
-            // console.log(formData);
+            // console.log(showHistory);
             getHistory(values);
+            setShowHistory(!showHistory);
           }
         }
         }>History</button>
       </div>
+
+      <div>
+
+        {
+          showHistory ?
+            <ul>
+              {history.map((item, index) => {
+                return <p key={index}>
+                  <img
+                    src={"http://localhost:8080/file/" + item.filename}
+                    alt="db img"
+                    style={{ width: "150px", height: "150px" }}
+                  />
+                  <span style={{ marginLeft: '50px' }}></span>
+                  {item.metadata.text}
+                </p>
+              })}
+            </ul>
+            : <p>x</p>
+        }
+      </div>
+
     </div>
   );
 }

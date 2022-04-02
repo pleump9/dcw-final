@@ -104,15 +104,23 @@ app.post("/file/upload", upload.single("file"), async (req, res) => {
   return res.send(imgUrl + req.body.name);
 });
 
-app.get("/file/get", async (req, res) => {
+app.get("/file/:filename", async (req, res) => {
   try {
-    const fileList = await gfs.files.find({ "metadata.email": "kingghostdragon@hotmail.co.th" }).toArray();
-    res.send(fileList)
-    // const readStream = gfs.createReadStream(fileList[0].filename);
-    // readStream.pipe(res);
-    // res.send(file.metadata.text)
+      const file = await gfs.files.findOne({ filename: req.params.filename });
+      const readStream = gfs.createReadStream(file.filename);
+      readStream.pipe(res);
   } catch (error) {
-    res.send("not found");
+      res.send("not found");
+  }
+});
+
+app.get("/file/:filename", async (req, res) => {
+  try {
+      const file = await gfs.files.findOne({ filename: req.params.filename });
+      const readStream = gfs.createReadStream(file.filename);
+      readStream.pipe(res);
+  } catch (error) {
+      res.send("not found");
   }
 });
 
