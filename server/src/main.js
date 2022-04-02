@@ -61,15 +61,12 @@ app.post("/form/submit", upload.single("file"), async (req, res) => {
 
 app.get("/form/history", async (req, res) => {
   try {
-    let result = await axios.get('http://localhost:8080', {
-      params: {
-
-      }
-    })
-  } catch (err) {
-    throw (err)
+    // res.send(req.query.email);
+    const fileList = await gfs.files.find({ "metadata.email": req.query.email }).toArray();
+    res.send(fileList)
+  } catch (error) {
+    res.send("not found");
   }
-  return
 })
 
 //-------------------- API  Login -------------------------
