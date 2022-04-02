@@ -34,11 +34,6 @@ function App() {
     }
   }
 
-  const callInfoAPI = async () => {
-    let result = await axios.get('http://localhost:8080/api/info')
-    console.log(result.data);
-  }
-
   const submitForm = async values => {
     console.log('waiting... ');
     const formData = new FormData();
@@ -75,28 +70,46 @@ function App() {
 
   return (
     <div className="App">
-      <GoogleLogin
-        clientId={'967709052865-n4vi83vdl1sdf79gh9coickriebopfmp.apps.googleusercontent.com'}
-        onSuccess={responseGoogle}
-        onFailure={responseGoogle}
-      >
-        <span> Login with Google</span>
-        {/* error.txt */}
-      </GoogleLogin>
+
       <br />
-      <FacebookLogin
-        appId="492042448972691"
-        autoLoad={true}
-        fields="name,email,picture"
-        callback={responseFacebook} />,
-      <button onClick={callInfoAPI}>Click me</button>
+      <div>
+        <GoogleLogin
+          clientId={'967709052865-n4vi83vdl1sdf79gh9coickriebopfmp.apps.googleusercontent.com'}
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+        >
+          <span> Login with Google</span>
+          {/* error.txt */}
+        </GoogleLogin>
+        <span style={{ marginLeft: '.5rem' }}></span>
+        <div>
+          {
+            email == "" ?
+              <FacebookLogin
+                appId="492042448972691"
+                autoLoad={true}
+                fields="name,email,picture"
+                callback={responseFacebook}
+              />
+              : <p> logged in as {email}</p>
+          }
+        </div>
+
+      </div>
+
+      <br />
+
+      <div>
+
+      </div>
+
       <form>
         <input
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-
+        <span style={{ marginLeft: '.5rem' }}></span>
         <input
           type="file"
           // value={selectedFile}
@@ -126,24 +139,32 @@ function App() {
         }>Submit</button>
       </form>
 
-      <button onClick={() => {
-        if (email != "") {
-          var values = {
-            email: email,
-          };
-          // console.log(formData);
-          getHistory(values);
-        }
-      }
-      }>History</button>
+      <br />
 
-      <React.Fragment>
-        <img
-          src={imagePreviewUrl ? imagePreviewUrl : "https://media.discordapp.net/attachments/754687185235607587/954365809793314826/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.png"
+      <div>
+        <React.Fragment>
+          <img
+            src={imagePreviewUrl ? imagePreviewUrl : "https://media.discordapp.net/attachments/754687185235607587/954365809793314826/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.png"
+            }
+            style={{ width: "150px", height: "150px" }}
+          />
+        </React.Fragment>
+      </div>
+
+      <br />
+
+      <div>
+        <button type='button' onClick={() => {
+          if (email != "") {
+            var values = {
+              email: email,
+            };
+            // console.log(formData);
+            getHistory(values);
           }
-          style={{ width: "150px", height: "150px" }}
-        />
-      </React.Fragment>
+        }
+        }>History</button>
+      </div>
     </div>
   );
 }

@@ -81,7 +81,7 @@ app.post('/api/login', bodyParser.json(), async (req, res) => {
       access_token: token
     }
   })
-  logger.warn('Login');
+  logger.info('Logged in');
 
   if (!result.data.id) {
     logger.error('Can not Login')
@@ -110,8 +110,9 @@ app.post("/file/upload", upload.single("file"), async (req, res) => {
 app.get("/file/get", async (req, res) => {
   try {
     const fileList = await gfs.files.find({ "metadata.email": "kingghostdragon@hotmail.co.th" }).toArray();
-    const readStream = gfs.createReadStream(fileList[1].filename);
-    readStream.pipe(res);
+    res.send(fileList)
+    // const readStream = gfs.createReadStream(fileList[0].filename);
+    // readStream.pipe(res);
     // res.send(file.metadata.text)
   } catch (error) {
     res.send("not found");
