@@ -100,8 +100,8 @@ app.post("/file/upload", upload.single("file"), async (req, res) => {
 
 app.get("/file/get", async (req, res) => {
   try {
-    const file = await gfs.files.findOne({ "metadata.email": "kingghostdragon@hotmail.co.th" });
-    const readStream = gfs.createReadStream(file.filename);
+    const fileList = await gfs.files.find({ "metadata.email": "kingghostdragon@hotmail.co.th" }).toArray();
+    const readStream = gfs.createReadStream(fileList[1].filename);
     readStream.pipe(res);
     // res.send(file.metadata.text)
   } catch (error) {
