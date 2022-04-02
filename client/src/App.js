@@ -174,11 +174,11 @@ function App() {
             <ul>
               {history.map((item, index) => {
                 return (
-                  <div key={index} style={{marginBottom: "3em"}}>
-                    Text: {item.metadata.text}
-                    <br/>
+                  <div key={index} style={{ marginBottom: "3em" }}>
                     createDate: {item.uploadDate}
-                    <br/>
+                    <br />
+                    Text: {item.metadata.text}
+                    <br />
                     <img
                       src={"http://localhost:8080/file/" + item.filename}
                       alt="db img"

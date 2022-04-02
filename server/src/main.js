@@ -66,8 +66,10 @@ app.get("/form/history", async (req, res) => {
       return new Date(b.uploadDate) - new Date(a.uploadDate);
     });
     res.send(fileList)
+    logger.info('Get History Successful!')
   } catch (error) {
     res.send("not found");
+    logger.error('Get History Failed!')
   }
 })
 
