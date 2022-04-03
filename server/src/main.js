@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 const cors = require('cors');
 const app = express();
-const port = 8080
+const port = 8000
 
 const upload = require("./middleware/upload");
 const Grid = require("gridfs-stream");
@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 
 app.post("/api/form/submit", upload.single("file"), async (req, res) => {
   if (req.file === undefined) return res.send("you must select a file.");
-  const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
+  const imgUrl = `http://localhost:8000/file/${req.file.filename}`;
   logger.info('Submit Form');
   return res.send(imgUrl + '\n text : ' + req.body.text + '\n email : ' + req.body.email);
 })
@@ -99,7 +99,7 @@ app.post('/api/login', bodyParser.json(), async (req, res) => {
 //-------------------- File -------------------------
 app.post("/api/file/upload", upload.single("file"), async (req, res) => {
   if (req.file === undefined) return res.send("you must select a file.");
-  const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
+  const imgUrl = `http://localhost:8000/file/${req.file.filename}`;
   return res.send(imgUrl + req.body.name);
 });
 

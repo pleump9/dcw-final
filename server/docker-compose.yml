@@ -4,7 +4,21 @@ services:
     container_name: web
     build: .
     ports:
-      - 127.0.0.1:8080:8080
+      - 127.0.0.1:8000:8000
+    networks:
+      - dcw
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+      - MONGO_INITDB_DATABASE=mydb
+    volumes:
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+      - ./db:/data/db
     networks:
       - dcw
 
