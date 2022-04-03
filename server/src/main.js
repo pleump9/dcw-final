@@ -62,7 +62,7 @@ app.post("/api/form/submit", upload.single("file"), async (req, res) => {
 app.get("/api/form/history", async (req, res) => {
   try {
     const fileList = await gfs.files.find({ "metadata.email": req.query.email }).toArray();
-    fileList.sort(function(a,b){
+    fileList.sort(function (a, b) {
       return new Date(b.uploadDate) - new Date(a.uploadDate);
     });
     res.send(fileList)
@@ -105,28 +105,32 @@ app.post("/api/file/upload", upload.single("file"), async (req, res) => {
 
 app.get("/api/file/:filename", async (req, res) => {
   try {
-      const file = await gfs.files.findOne({ filename: req.params.filename });
-      const readStream = gfs.createReadStream(file.filename);
-      readStream.pipe(res);
+    const file = await gfs.files.findOne({ filename: req.params.filename });
+    const readStream = gfs.createReadStream(file.filename);
+    readStream.pipe(res);
   } catch (error) {
-      res.send("not found");
+    res.send("not found");
   }
 });
 
 app.get("/api/file/:filename", async (req, res) => {
   try {
-      const file = await gfs.files.findOne({ filename: req.params.filename });
-      const readStream = gfs.createReadStream(file.filename);
-      readStream.pipe(res);
+    const file = await gfs.files.findOne({ filename: req.params.filename });
+    const readStream = gfs.createReadStream(file.filename);
+    readStream.pipe(res);
   } catch (error) {
-      res.send("not found");
+    res.send("not found");
   }
 });
 
-app.delete("/api/file/:filename", async (req, res) => {
+app.delete("/api/file/:_id", async (req, res) => {
   try {
-    await gfs.files.deleteOne({ filename: req.params.filename });
-    res.send("success");
+    const ObjectID = require('mongodb').ObjectId;
+    await gfs.files.deleteOne({
+      _id: new
+        ObjectID(req.params._id)
+    });
+    res.send(`ObjectId("${req.params._id}")`);
   } catch (error) {
     console.log(error);
     res.send("An error occured.");

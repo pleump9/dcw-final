@@ -56,7 +56,7 @@ function App() {
     console.log(result.data);
     setText('');
     setSelectedFile(null);
-    document.getElementById("input-file").value=null; 
+    document.getElementById("input-file").value = null;
     setImagePreviewUrl(null)
   }
 
@@ -71,6 +71,13 @@ function App() {
     });
     console.log(result.data);
     setHistory(result.data);
+  }
+
+  const deleteHistory = async values => {
+    console.log('waiting... ');
+    console.log(values.item._id);
+    let result = await axios.delete(`${config.apiUrlPrefix}/file/${values.item._id}`);
+    console.log(result.data);
   }
 
   return (
@@ -184,6 +191,13 @@ function App() {
                     createDate: {item.uploadDate}
                     <br />
                     Text: {item.metadata.text}
+                    <span><button type='button' style={{ marginLeft: "20em" }}
+                      onClick={() => {
+                        var values = {
+                          item: item,
+                        };
+                        deleteHistory(values);
+                      }}>delete</button></span>
                     <br />
                     <img
                       src={`${config.apiUrlPrefix}/file/${item.filename}`}
