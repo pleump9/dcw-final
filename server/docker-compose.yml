@@ -1,5 +1,9 @@
 version: '3'
 services:
+  mongodb:
+    image: mongo
+    networks:
+      - dcw
   web:
     container_name: web
     build: .
