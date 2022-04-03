@@ -56,6 +56,7 @@ function App() {
     console.log(result.data);
     setText('');
     setSelectedFile(null);
+    document.getElementById("input-file").value=null; 
     setImagePreviewUrl(null)
   }
 
@@ -96,7 +97,7 @@ function App() {
         {
           email === "" ?
             <FacebookLogin
-              appId="979747605978163"
+              appId="492042448972691"
               autoLoad={true}
               fields="name,email,picture"
               callback={responseFacebook}
@@ -122,6 +123,7 @@ function App() {
         <br />
         <input
           type="file"
+          id="input-file"
           onChange={(e) => {
             console.log(e.target.files[0]);
             setSelectedFile(e.target.files[0]);
