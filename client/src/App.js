@@ -54,6 +54,9 @@ function App() {
       data: formData
     })
     console.log(result.data);
+    setText('');
+    setSelectedFile(null);
+    setImagePreviewUrl(null)
   }
 
   const getHistory = async values => {
@@ -93,7 +96,7 @@ function App() {
         {
           email === "" ?
             <FacebookLogin
-              appId="492042448972691"
+              appId="979747605978163"
               autoLoad={true}
               fields="name,email,picture"
               callback={responseFacebook}
@@ -106,12 +109,17 @@ function App() {
       </div>
 
       <form>
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-        <span style={{ marginLeft: '.5rem' }}></span>
+        <label>
+          Enter the text:
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            style={{ marginLeft: '1em' }}
+          />
+        </label>
+        <br />
+        <br />
         <input
           type="file"
           onChange={(e) => {
@@ -124,58 +132,64 @@ function App() {
             reader.readAsDataURL(e.target.files[0])
           }}
         />
-        <button type='button' onClick={() => {
-          if (email !== "") {
-            var values = {
-              text: text,
-              email: email,
-              file: selectedFile
-            };
-            submitForm(values);
-          }
-        }
-        }>Submit</button>
-      </form>
-
-      <br />
-      <div>
-        <p>selected file preview : </p>
-        <React.Fragment>
-          <img
-            src={imagePreviewUrl ? imagePreviewUrl : "https://media.discordapp.net/attachments/754687185235607587/954365809793314826/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.png"
+        <br />
+        <div>
+          <p>selected file preview : </p>
+          <React.Fragment>
+            <img
+              src={imagePreviewUrl ? imagePreviewUrl : "https://media.discordapp.net/attachments/754687185235607587/954365809793314826/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.png"
+              }
+              alt="mock img"
+              style={{ width: "150px", height: "150px", marginLeft: "5em" }}
+            />
+          </React.Fragment>
+        </div>
+        <br />
+        <button type='button' style={{ marginLeft: "20em" }}
+          onClick={() => {
+            if (email !== "") {
+              var values = {
+                text: text,
+                email: email,
+                file: selectedFile
+              };
+              submitForm(values);
             }
-            alt="mock img"
-            style={{ width: "150px", height: "150px" }}
-          />
-        </React.Fragment>
-      </div>
+          }
+          }>Submit</button>
+      </form>
       <br />
       <div>
-        <button type='button' onClick={() => {
-          if (email !== "") {
-            var values = {
-              email: email,
-            };
-            getHistory(values);
-            setShowHistory(!showHistory);
+        <button type='button' style={{ marginTop: "5em" }}
+          onClick={() => {
+            if (email !== "") {
+              var values = {
+                email: email,
+              };
+              getHistory(values);
+              setShowHistory(!showHistory);
+            }
           }
-        }
-        }>History</button>
+          }>History</button>
       </div>
       <div>
         {
           showHistory ?
             <ul>
               {history.map((item, index) => {
-                return <p key={index}>
-                  <img
-                    src={`${config.apiUrlPrefix}/file/${item.filename}`}
-                    alt="db img"
-                    style={{ width: "150px", height: "150px" }}
-                  />
-                  <span style={{ marginLeft: '50px' }}></span>
-                  {item.metadata.text}
-                </p>
+                return (
+                  <div key={index} style={{ marginBottom: "3em" }}>
+                    createDate: {item.uploadDate}
+                    <br />
+                    Text: {item.metadata.text}
+                    <br />
+                    <img
+                      src={`${config.apiUrlPrefix}/file/${item.filename}`}
+                      alt="db img"
+                      style={{ width: "150px", height: "150px", marginTop: "1em" }}
+                    />
+                    <span style={{ marginLeft: '50px' }}></span>
+                  </div>)
               })}
             </ul>
             : <p></p>

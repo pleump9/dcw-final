@@ -62,9 +62,14 @@ app.post("/api/form/submit", upload.single("file"), async (req, res) => {
 app.get("/api/form/history", async (req, res) => {
   try {
     const fileList = await gfs.files.find({ "metadata.email": req.query.email }).toArray();
+    fileList.sort(function(a,b){
+      return new Date(b.uploadDate) - new Date(a.uploadDate);
+    });
     res.send(fileList)
+    logger.info('Get History Successful!')
   } catch (error) {
     res.send("not found");
+    logger.error('Get History Failed!')
   }
 })
 
