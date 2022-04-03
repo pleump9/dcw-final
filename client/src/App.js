@@ -53,6 +53,9 @@ function App() {
       data: formData
     })
     console.log(result.data);
+    setText('');
+    setSelectedFile(null);
+    setImagePreviewUrl(null)
   }
 
   const getHistory = async values => {
