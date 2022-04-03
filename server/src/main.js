@@ -52,14 +52,14 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.post("/form/submit", upload.single("file"), async (req, res) => {
+app.post("/api/form/submit", upload.single("file"), async (req, res) => {
   if (req.file === undefined) return res.send("you must select a file.");
   const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
   logger.info('Submit Form');
   return res.send(imgUrl + '\n text : ' + req.body.text + '\n email : ' + req.body.email);
 })
 
-app.get("/form/history", async (req, res) => {
+app.get("/api/form/history", async (req, res) => {
   try {
     const fileList = await gfs.files.find({ "metadata.email": req.query.email }).toArray();
     res.send(fileList)
@@ -91,19 +91,14 @@ app.post('/api/login', bodyParser.json(), async (req, res) => {
   res.send({ access_token, username: data.username })
 })
 
-app.get('/api/info', authtenticated, (req, res) => {
-  logger.info('refresh_token');
-  res.send({ ok: 1, username: req.username });
-})
-
 //-------------------- File -------------------------
-app.post("/file/upload", upload.single("file"), async (req, res) => {
+app.post("/api/file/upload", upload.single("file"), async (req, res) => {
   if (req.file === undefined) return res.send("you must select a file.");
   const imgUrl = `http://localhost:8080/file/${req.file.filename}`;
   return res.send(imgUrl + req.body.name);
 });
 
-app.get("/file/:filename", async (req, res) => {
+app.get("/api/file/:filename", async (req, res) => {
   try {
       const file = await gfs.files.findOne({ filename: req.params.filename });
       const readStream = gfs.createReadStream(file.filename);
@@ -113,7 +108,7 @@ app.get("/file/:filename", async (req, res) => {
   }
 });
 
-app.get("/file/:filename", async (req, res) => {
+app.get("/api/file/:filename", async (req, res) => {
   try {
       const file = await gfs.files.findOne({ filename: req.params.filename });
       const readStream = gfs.createReadStream(file.filename);
@@ -123,7 +118,7 @@ app.get("/file/:filename", async (req, res) => {
   }
 });
 
-app.delete("/file/:filename", async (req, res) => {
+app.delete("/api/file/:filename", async (req, res) => {
   try {
     await gfs.files.deleteOne({ filename: req.params.filename });
     res.send("success");

@@ -2,6 +2,7 @@ import axios from 'axios'
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 import React, { useState } from 'react';
+import config from './config';
 // P9's facebook app id 979747605978163
 // Uekiz's facebook app id 492042448972691
 
@@ -32,7 +33,7 @@ function App() {
     console.log(response);
     if (response.accessToken) {
       console.log('log in with accessToken=' + response.accessToken);
-      let result = await axios.post('http://localhost:8080/api/login', {
+      let result = await axios.post(`${config.apiUrlPrefix}/login`, {
         token: response.accessToken
       })
       console.log(result.data);
@@ -49,7 +50,7 @@ function App() {
     formData.append('file', values.file);
     let result = await axios({
       method: 'post',
-      url: 'http://localhost:8080/form/submit',
+      url: `${config.apiUrlPrefix}/form/submit`,
       data: formData
     })
     console.log(result.data);
@@ -58,7 +59,7 @@ function App() {
   const getHistory = async values => {
     console.log('waiting... ');
     console.log(values.email);
-    let result = await axios.get('http://localhost:8080/form/history', {
+    let result = await axios.get(`${config.apiUrlPrefix}/form/history`, {
       params:
       {
         email: values.email
@@ -168,7 +169,7 @@ function App() {
               {history.map((item, index) => {
                 return <p key={index}>
                   <img
-                    src={"http://localhost:8080/file/" + item.filename}
+                    src={`${config.apiUrlPrefix}/file/${item.filename}`}
                     alt="db img"
                     style={{ width: "150px", height: "150px" }}
                   />
