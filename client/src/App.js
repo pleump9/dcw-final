@@ -1,6 +1,5 @@
 import axios from 'axios'
 import FacebookLogin from 'react-facebook-login';
-import GoogleLogin from 'react-google-login';
 import React, { useState } from 'react';
 import config from './config';
 // P9's facebook app id 979747605978163
@@ -24,10 +23,6 @@ function App() {
   }, function (err) {
     return Promise.reject(err)
   })
-
-  const responseGoogle = (response) => {
-    console.log(response);
-  }
 
   const responseFacebook = async (response) => {
     console.log(response);
@@ -89,18 +84,6 @@ function App() {
         }
       </div>
       <div>
-        {
-          email === "" ?
-            <span><GoogleLogin
-              clientId={'967709052865-n4vi83vdl1sdf79gh9coickriebopfmp.apps.googleusercontent.com'}
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-            >
-              <span> Login with Google</span>
-            </GoogleLogin></span>
-            : <p></p>
-        }
-        <span style={{ marginLeft: '20px' }}></span>
         {
           email === "" ?
             <FacebookLogin
